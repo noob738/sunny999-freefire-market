@@ -12,10 +12,13 @@ if (!BOT_TOKEN || !ADMIN_CHAT_ID) {
 
 const bot = new TelegramBot(BOT_TOKEN, { polling: true });
 
-const DATA_FILE = "store-data.json";
+const DATA_FILE = "activation-data.json";
 
 const WEBSITE =
   "https://noob738.github.io/sunny999-activation-center/";
+
+const SUPPORT =
+  "https://t.me/FreeFireActivationBot";
 
 const PLANS = {
   prime5: { name: "PRIME 5 ID", amount: 999 },
@@ -27,7 +30,9 @@ const PLANS = {
 function loadData() {
   try {
     if (fs.existsSync(DATA_FILE)) {
-      return JSON.parse(fs.readFileSync(DATA_FILE, "utf8"));
+      return JSON.parse(
+        fs.readFileSync(DATA_FILE, "utf8")
+      );
     }
   } catch (e) {
     console.error("Data load error:", e.message);
@@ -35,64 +40,18 @@ function loadData() {
 
   return {
     orders: [],
-    credentials: [],
     usedScreenshots: []
   };
 }
 
 function saveData(data) {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+  fs.writeFileSync(
+    DATA_FILE,
+    JSON.stringify(data, null, 2)
+  );
 }
 
 let data = loadData();
-
-function randomString(length) {
-  const chars =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-  let result = "";
-
-  for (let i = 0; i < length; i++) {
-    result += chars.charAt(
-      Math.floor(Math.random() * chars.length)
-    );
-  }
-
-  return result;
-}
-
-function generateLogin() {
-  let login;
-
-  do {
-    login = randomString(12).toLowerCase() + "@gmail.com";
-  } while (
-    data.credentials.some(x => x.login === login)
-  );
-
-  return login;
-}
-
-function generatePassword() {
-  return randomString(16);
-}
-
-function generateActivationCode() {
-  let code;
-
-  do {
-    code = "";
-
-    for (let i = 0; i < 10; i++) {
-      code += Math.floor(Math.random() * 10);
-    }
-
-  } while (
-    data.credentials.some(x => x.activationCode === code)
-  );
-
-  return code;
-}
 
 
 /* START */
@@ -100,19 +59,23 @@ function generateActivationCode() {
 bot.onText(/^\/start(?:\s+(.+))?$/, async (msg, match) => {
 
   const chatId = msg.chat.id;
-  const payload = match && match[1]
-    ? match[1].trim()
-    : "";
+
+  const payload =
+    match && match[1]
+      ? match[1].trim()
+      : "";
 
   if (!payload) {
 
     await bot.sendMessage(
       chatId,
 
-      "👑 SUNNY 999 BOT\n\n" +
-      "🔥 FREE FIRE ACCOUNT STORE\n\n" +
-      "🌐 Website:\n" +
-      WEBSITE
+      "🔥 FREE FIRE ACTIVATION BOT\n\n" +
+      "🌐 Activation Website:\n" +
+      WEBSITE +
+      "\n\n" +
+      "💬 Support:\n" +
+      SUPPORT
     );
 
     return;
@@ -124,14 +87,14 @@ bot.onText(/^\/start(?:\s+(.+))?$/, async (msg, match) => {
 
     await bot.sendMessage(
       chatId,
-      "❌ Invalid account selection."
+      "❌ Invalid plan selection."
     );
 
     return;
   }
 
   const orderId =
-    "ORD-" +
+    "ACT-" +
     Date.now() +
     "-" +
     Math.floor(Math.random() * 1000);
@@ -166,22 +129,23 @@ bot.onText(/^\/start(?:\s+(.+))?$/, async (msg, match) => {
   saveData(data);
 
   await bot.sendMessage(
+
     chatId,
 
-    "🛒 ORDER CREATED\n\n" +
+    "⚡ ACTIVATION PAYMENT\n\n" +
 
-    "🎮 Account: " +
+    "🎮 Plan: " +
     plan.name +
 
     "\n💰 Amount: ₹" +
     plan.amount +
 
-    "\n\n📸 Payment karne ke baad " +
-    "PAYMENT SCREENSHOT yahin send karo.\n\n" +
+    "\n\n" +
 
-    "⚠️ Sirf real payment screenshot bhejo.\n" +
+    "📸 Payment karne ke baad " +
+    "payment screenshot yahin send karo.\n\n" +
 
-    "❌ Fake / edited proof submit mat karo."
+    "⏳ Admin payment verify karega."
   );
 });
 
@@ -192,7 +156,7 @@ bot.on("photo", async (msg) => {
 
   const chatId = msg.chat.id;
 
-  const pendingOrders =
+  const pending =
     data.orders
 
       .filter(
@@ -208,20 +172,20 @@ bot.on("photo", async (msg) => {
           new Date(a.createdAt)
       );
 
-  if (!pendingOrders.length) {
+  if (!pending.length) {
 
     await bot.sendMessage(
+
       chatId,
 
-      "❌ Koi pending order nahi mila.\n\n" +
-
-      "Pehle store website se BUY NOW karo."
+      "❌ Koi pending activation payment nahi mila.\n\n" +
+      "Pehle activation website se process start karo."
     );
 
     return;
   }
 
-  const order = pendingOrders[0];
+  const order = pending[0];
 
   const photo =
     msg.photo[msg.photo.length - 1];
@@ -234,6 +198,7 @@ bot.on("photo", async (msg) => {
   ) {
 
     await bot.sendMessage(
+
       chatId,
 
       "❌ Ye payment screenshot pehle submit ho chuka hai."
@@ -259,23 +224,24 @@ bot.on("photo", async (msg) => {
   saveData(data);
 
   await bot.sendMessage(
+
     chatId,
 
-    "✅ PAYMENT PROOF RECEIVED\n\n" +
+    "✅ PAYMENT SCREENSHOT RECEIVED\n\n" +
 
-    "⏳ Admin payment verify karega.\n" +
+    "⏳ Admin verification pending hai.\n" +
 
-    "Approval ke baad account details Telegram par milengi."
+    "Approval ke baad activation process continue hoga."
   );
 
   const adminText =
 
-    "🔔 NEW PAYMENT VERIFICATION\n\n" +
+    "🔔 ACTIVATION PAYMENT\n\n" +
 
     "🆔 Order: " +
     order.id +
 
-    "\n🎮 Account: " +
+    "\n🎮 Plan: " +
     order.planName +
 
     "\n💰 Amount: ₹" +
@@ -284,13 +250,13 @@ bot.on("photo", async (msg) => {
     "\n👤 User: " +
     (order.firstName || "Unknown") +
 
-    "\n🔗 Username: @" +
+    "\n🔗 @" +
     (order.username || "N/A") +
 
     "\n🆔 User ID: " +
     order.userId +
 
-    "\n\n📸 Payment screenshot attached.";
+    "\n\n📸 Screenshot attached.";
 
   await bot.sendPhoto(
 
@@ -326,13 +292,11 @@ bot.on("photo", async (msg) => {
       }
 
     }
-
   );
-
 });
 
 
-/* ADMIN APPROVE / REJECT */
+/* ADMIN */
 
 bot.on("callback_query", async (query) => {
 
@@ -343,7 +307,6 @@ bot.on("callback_query", async (query) => {
 
     await bot.answerCallbackQuery(
       query.id,
-
       {
         text: "❌ Not authorized",
         show_alert: true
@@ -390,7 +353,6 @@ bot.on("callback_query", async (query) => {
 
     await bot.answerCallbackQuery(
       query.id,
-
       {
         text: "Order not found",
         show_alert: true
@@ -407,9 +369,8 @@ bot.on("callback_query", async (query) => {
 
     await bot.answerCallbackQuery(
       query.id,
-
       {
-        text: "Order already processed",
+        text: "Already processed",
         show_alert: true
       }
     );
@@ -433,20 +394,20 @@ bot.on("callback_query", async (query) => {
 
       order.userId,
 
-      "❌ PAYMENT REJECTED\n\n" +
+      "❌ ACTIVATION PAYMENT REJECTED\n\n" +
 
-      "Aapka payment proof approve nahi hua.\n\n" +
+      "Payment proof approve nahi hua.\n\n" +
 
-      "Please contact support."
+      "💬 Support:\n" +
+      SUPPORT
     );
 
     try {
 
       await bot.editMessageCaption(
 
-        "❌ PAYMENT REJECTED\n\n" +
-
-        "Order: " +
+        "❌ ACTIVATION PAYMENT REJECTED\n\n" +
+        "🆔 Order: " +
         order.id,
 
         {
@@ -456,7 +417,6 @@ bot.on("callback_query", async (query) => {
           message_id:
             query.message.message_id
         }
-
       );
 
     } catch (e) {}
@@ -468,7 +428,6 @@ bot.on("callback_query", async (query) => {
       {
         text: "Payment rejected"
       }
-
     );
 
     return;
@@ -478,46 +437,6 @@ bot.on("callback_query", async (query) => {
   /* APPROVE */
 
   if (action === "approve") {
-
-    const login =
-      generateLogin();
-
-    const password =
-      generatePassword();
-
-    const activationCode =
-      generateActivationCode();
-
-    const credentials = {
-
-      orderId:
-        order.id,
-
-      userId:
-        order.userId,
-
-      plan:
-        order.plan,
-
-      planName:
-        order.planName,
-
-      login:
-        login,
-
-      password:
-        password,
-
-      activationCode:
-        activationCode,
-
-      createdAt:
-        new Date().toISOString()
-    };
-
-    data.credentials.push(
-      credentials
-    );
 
     order.status =
       "APPROVED";
@@ -531,42 +450,38 @@ bot.on("callback_query", async (query) => {
 
       order.userId,
 
-      "🎉 PAYMENT APPROVED\n\n" +
+      "🎉 ACTIVATION PAYMENT APPROVED\n\n" +
 
-      "👑 " +
+      "🎮 " +
       order.planName +
 
-      "\n\n📧 LOGIN ID:\n" +
-      login +
+      "\n💰 ₹" +
+      order.amount +
 
-      "\n\n🔐 PASSWORD:\n" +
-      password +
+      "\n\n" +
 
-      "\n\n🔑 ACTIVATION CODE:\n" +
-      activationCode +
-
-      "\n\n🌐 ACTIVATION WEBSITE:\n" +
+      "🌐 ACTIVATION WEBSITE:\n" +
       WEBSITE +
 
-      "\n\n⚠️ Ye details private rakho."
+      "\n\n" +
+
+      "✅ Ab activation website par process continue karo."
     );
 
     try {
 
       await bot.editMessageCaption(
 
-        "✅ PAYMENT APPROVED\n\n" +
+        "✅ ACTIVATION PAYMENT APPROVED\n\n" +
 
         "🆔 Order: " +
         order.id +
 
-        "\n🎮 Account: " +
+        "\n🎮 " +
         order.planName +
 
-        "\n💰 Amount: ₹" +
-        order.amount +
-
-        "\n\n🔐 Account details delivered to buyer.",
+        "\n💰 ₹" +
+        order.amount,
 
         {
           chat_id:
@@ -575,7 +490,6 @@ bot.on("callback_query", async (query) => {
           message_id:
             query.message.message_id
         }
-
       );
 
     } catch (e) {}
@@ -587,15 +501,65 @@ bot.on("callback_query", async (query) => {
       {
         text: "Payment approved"
       }
-
     );
-
   }
 
 });
 
 
-/* STOCK */
+/* ADMIN COMMANDS */
+
+bot.onText(/^\/orders$/, async (msg) => {
+
+  if (
+    String(msg.from.id) !==
+    ADMIN_CHAT_ID
+  ) return;
+
+  const recent =
+    data.orders
+      .slice(-10)
+      .reverse();
+
+  if (!recent.length) {
+
+    await bot.sendMessage(
+      msg.chat.id,
+      "📭 No orders yet."
+    );
+
+    return;
+  }
+
+  let text =
+    "📋 ACTIVATION ORDERS\n\n";
+
+  recent.forEach(o => {
+
+    text +=
+
+      "🆔 " +
+      o.id +
+
+      "\n🎮 " +
+      o.planName +
+
+      "\n💰 ₹" +
+      o.amount +
+
+      "\n📌 " +
+      o.status +
+
+      "\n\n";
+
+  });
+
+  await bot.sendMessage(
+    msg.chat.id,
+    text
+  );
+});
+
 
 bot.onText(/^\/stock$/, async (msg) => {
 
@@ -624,9 +588,9 @@ bot.onText(/^\/stock$/, async (msg) => {
 
     msg.chat.id,
 
-    "📊 STORE STATUS\n\n" +
+    "📊 ACTIVATION STATUS\n\n" +
 
-    "📦 Total Orders: " +
+    "📦 Total: " +
     total +
 
     "\n⏳ Pending: " +
@@ -635,121 +599,8 @@ bot.onText(/^\/stock$/, async (msg) => {
     "\n✅ Approved: " +
     approved
   );
-
 });
 
-
-/* ORDERS */
-
-bot.onText(/^\/orders$/, async (msg) => {
-
-  if (
-    String(msg.from.id) !==
-    ADMIN_CHAT_ID
-  ) return;
-
-  const recent =
-    data.orders
-      .slice(-10)
-      .reverse();
-
-  if (!recent.length) {
-
-    await bot.sendMessage(
-      msg.chat.id,
-      "📭 No orders yet."
-    );
-
-    return;
-  }
-
-  let text =
-    "📋 RECENT ORDERS\n\n";
-
-  recent.forEach(o => {
-
-    text +=
-
-      "🆔 " +
-      o.id +
-
-      "\n🎮 " +
-      o.planName +
-
-      "\n💰 ₹" +
-      o.amount +
-
-      "\n📌 " +
-      o.status +
-
-      "\n\n";
-
-  });
-
-  await bot.sendMessage(
-    msg.chat.id,
-    text
-  );
-
-});
-
-
-/* CREDENTIALS */
-
-bot.onText(
-  /^\/credentials$/,
-  async (msg) => {
-
-    if (
-      String(msg.from.id) !==
-      ADMIN_CHAT_ID
-    ) return;
-
-    const recent =
-      data.credentials
-        .slice(-10)
-        .reverse();
-
-    if (!recent.length) {
-
-      await bot.sendMessage(
-        msg.chat.id,
-        "📭 No credentials generated yet."
-      );
-
-      return;
-    }
-
-    let text =
-      "🔐 GENERATED DETAILS\n\n";
-
-    recent.forEach(c => {
-
-      text +=
-
-        "🎮 " +
-        c.planName +
-
-        "\n📧 " +
-        c.login +
-
-        "\n🔑 " +
-        c.activationCode +
-
-        "\n\n";
-
-    });
-
-    await bot.sendMessage(
-      msg.chat.id,
-      text
-    );
-
-  }
-);
-
-
-/* ADMIN */
 
 bot.onText(/^\/admin$/, async (msg) => {
 
@@ -762,15 +613,11 @@ bot.onText(/^\/admin$/, async (msg) => {
 
     msg.chat.id,
 
-    "👑 SUNNY 999 ADMIN PANEL\n\n" +
+    "👑 ACTIVATION ADMIN\n\n" +
 
-    "/stock — Store status\n" +
-
-    "/orders — Recent orders\n" +
-
-    "/credentials — Generated details"
+    "/orders — Orders\n" +
+    "/stock — Status"
   );
-
 });
 
 
@@ -803,7 +650,7 @@ http.createServer(
     );
 
     res.end(
-      "SUNNY 999 BOT ONLINE"
+      "FREE FIRE ACTIVATION BOT ONLINE"
     );
 
   }
@@ -812,7 +659,7 @@ http.createServer(
   () => {
 
     console.log(
-      "SUNNY 999 BOT running on port " +
+      "Activation Bot running on port " +
       PORT
     );
 
@@ -820,5 +667,5 @@ http.createServer(
 );
 
 console.log(
-  "FFAccountXBot started successfully."
+  "FreeFireActivationBot started successfully."
 );
