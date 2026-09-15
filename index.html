@@ -1,820 +1,1033 @@
-<!DOCTYPE html>  <html lang="en">  
-<head>  
-<meta charset="UTF-8">  
-<meta name="viewport" content="width=device-width,initial-scale=1.0">  
-<title>SUNNY 999 BOT — FREE FIRE ACCOUNT STORE</title>  <style>  
-*{box-sizing:border-box;margin:0;padding:0}  
-  
-body{  
-font-family:Arial,sans-serif;  
-background:linear-gradient(135deg,#08000f,#19002e,#08000f);  
-color:#fff;  
-min-height:100vh  
-}  
-  
-.container{max-width:1050px;margin:auto;padding:8px}  
-  
-.hero{  
-text-align:center;  
-padding:14px 9px;  
-border:1px solid #b63cff;  
-border-radius:18px;  
-background:linear-gradient(145deg,#19002d,#0d0018);  
-box-shadow:0 0 20px #9d20ff55  
-}  
-  
-.hero h1{  
-font-size:clamp(24px,5vw,38px);  
-color:#d889ff;  
-text-shadow:0 0 15px #a600ff;  
-margin-bottom:4px  
-}  
-  
-.hero p{color:#ddd;font-size:12px;margin-top:3px}  
-  
-.notice{  
-margin:8px 0;  
-padding:10px 8px;  
-text-align:center;  
-border-radius:12px;  
-background:#281000;  
-border:1px solid #ff9700  
-}  
-  
-.notice strong{color:#ffb52e;font-size:14px}  
-.notice small{display:block;color:#ccc;margin-top:4px;font-size:11px}  
-  
-.cc-board{  
-margin:8px 0;  
-padding:11px 8px;  
-text-align:center;  
-border-radius:12px;  
-border:1px solid #00eaff;  
-background:#06151b;  
-color:#00f6ff;  
-font-size:13px;  
-font-weight:bold;  
-text-shadow:0 0 8px #00eaff;  
-box-shadow:0 0 15px #00eaff55  
-}  
-  
-.stats{  
-display:grid;  
-grid-template-columns:repeat(2,1fr);  
-gap:7px;  
-margin:8px 0  
-}  
-  
-.stat{  
-padding:10px 6px;  
-text-align:center;  
-background:#11001e;  
-border:1px solid #7020a8;  
-border-radius:12px  
-}  
-  
-.stat b{display:block;font-size:17px}  
-.stat span{display:block;font-size:9px;color:#aaa;margin-top:2px}  
-.live{color:#43ff91!important}  
-  
-.countdown{  
-text-align:center;  
-margin:8px 0 13px;  
-padding:10px;  
-border-radius:13px;  
-background:#07151d;  
-border:1px solid #00dcff  
-}  
-  
-.countdown-title{font-size:12px}  
-  
-.time{  
-font-size:25px;  
-font-weight:bold;  
-color:#00eaff;  
-letter-spacing:2px;  
-margin:3px 0  
-}  
-  
-.countdown small{color:#aaa;font-size:10px}  
-  
-.section-title{  
-text-align:center;  
-margin:14px 0 10px;  
-font-size:22px;  
-color:#d87cff  
-}  
-  
-.grid{  
-display:grid;  
-grid-template-columns:repeat(2,1fr);  
-gap:10px  
-}  
-  
-.card{  
-background:linear-gradient(145deg,#180027,#0c0015);  
-border:1px solid #8c27c4;  
-border-radius:15px;  
-padding:9px  
-}  
-  
-.card.sold{border-color:#555;opacity:.86}  
-  
-.badge{  
-display:inline-block;  
-padding:4px 7px;  
-border-radius:20px;  
-background:#123522;  
-color:#50ff99;  
-font-size:9px;  
-font-weight:bold;  
-margin-bottom:5px  
-}  
-  
-.sold .badge{  
-background:#351414;  
-color:#ff6060  
-}  
-  
-.card h3{font-size:18px;margin-bottom:2px}  
-  
-.price{  
-font-size:23px;  
-font-weight:bold;  
-color:#ffc43d;  
-margin:3px 0 7px  
-}  
-  
-.what{  
-background:#100019;  
-border:1px solid #63247c;  
-border-radius:9px;  
-padding:8px;  
-margin-bottom:7px  
-}  
-  
-.what b{color:#dc80ff;font-size:11px}  
-  
-.what p{  
-color:#ccc;  
-font-size:11px;  
-line-height:1.4;  
-margin-top:3px  
-}  
-  
-.account-img{  
-width:100%;  
-height:auto;  
-object-fit:contain;  
-display:block;  
-border-radius:10px;  
-border:1px solid #7d2ba6;  
-margin-bottom:7px;  
-background:transparent  
-}  
-  
-.locked{  
-background:#08080d;  
-border:1px dashed #666;  
-border-radius:9px;  
-padding:8px;  
-margin-bottom:7px;  
-color:#aaa;  
-font-size:11px;  
-line-height:1.6  
-}  
-  
-.locked strong{color:#fff}  
-  
-.buy{  
-display:block;  
-width:100%;  
-text-align:center;  
-text-decoration:none;  
-padding:10px;  
-border:0;  
-border-radius:9px;  
-background:linear-gradient(90deg,#8700ff,#c400ff);  
-color:#fff;  
-font-weight:bold;  
-font-size:13px;  
-cursor:pointer  
-}  
-  
-.card-payment{  
-display:none;  
-margin-top:8px;  
-padding:10px;  
-background:linear-gradient(145deg,#170021,#0b0014);  
-border:1px solid #a32cff;  
-border-radius:12px;  
-text-align:center  
-}  
-  
-.card-payment.active{display:block}  
-  
-.card-payment h4{  
-color:#dd7cff;  
-font-size:16px;  
-margin-bottom:4px  
-}  
-  
-.pay-amount{  
-color:#ffc43d;  
-font-size:21px;  
-font-weight:bold;  
-margin-bottom:7px  
-}  
-  
-.qr{  
-width:180px;  
-max-width:90%;  
-padding:5px;  
-background:#fff;  
-border-radius:10px;  
-display:block;  
-margin:5px auto 8px  
-}  
-  
-.upi{  
-display:flex;  
-align-items:center;  
-justify-content:center;  
-gap:5px;  
-flex-wrap:wrap;  
-margin:7px 0  
-}  
-  
-.upi-code{  
-padding:8px 9px;  
-background:#08080d;  
-border:1px solid #63307d;  
-border-radius:8px;  
-color:#00ffad;  
-font-weight:bold;  
-font-size:11px  
-}  
-  
-.copy{  
-border:0;  
-padding:8px 10px;  
-border-radius:8px;  
-background:#00bfff;  
-color:#001018;  
-font-weight:bold;  
-cursor:pointer;  
-font-size:11px  
-}  
-  
-.name-input{  
-width:100%;  
-padding:10px;  
-border-radius:8px;  
-border:1px solid #63307d;  
-background:#08000f;  
-color:#fff;  
-font-size:11px;  
-outline:none;  
-margin:5px 0  
-}  
-  
-.warning{  
-margin:9px 0;  
-padding:9px;  
-text-align:left;  
-background:#2a1000;  
-border:1px solid #ff8b00;  
-border-radius:10px;  
-font-size:10px;  
-line-height:1.5  
-}  
-  
-.warning b{color:#ffb42e;font-size:12px}  
-  
-.telegram{  
-display:block;  
-text-decoration:none;  
-background:#168bd1;  
-color:#fff;  
-padding:10px;  
-border-radius:9px;  
-font-weight:bold;  
-margin-top:7px;  
-font-size:12px  
-}  
-  
-.payment-note{  
-font-size:9px;  
-color:#aaa;  
-line-height:1.4;  
-margin-top:6px  
-}  
-  
-.prime6-countdown{  
-text-align:center;  
-padding:8px;  
-margin-bottom:7px;  
-border-radius:9px;  
-background:#07151d;  
-border:1px solid #00dcff  
-}  
-  
-.prime6-countdown small{  
-color:#aaa;  
-display:block;  
-font-size:9px  
-}  
-  
-.prime6-time{  
-color:#00eaff;  
-font-size:21px;  
-font-weight:bold;  
-margin-top:2px  
-}  
-  
-.soldbox{  
-padding:25px 8px;  
-text-align:center;  
-border:1px dashed #555;  
-border-radius:10px;  
-color:#999;  
-margin-bottom:7px;  
-font-size:11px  
-}  
-  
-.soldbox b{  
-display:block;  
-color:#ff5555;  
-font-size:18px;  
-margin-bottom:4px  
-}  
-  
-.trust{  
-margin:13px 0;  
-padding:12px 9px;  
-text-align:center;  
-background:#11001d;  
-border:1px solid #70258e;  
-border-radius:14px  
-}  
-  
-.trust h3{  
-color:#e09aff;  
-margin-bottom:8px;  
-font-size:17px  
-}  
-  
-.trust-grid{  
-display:grid;  
-grid-template-columns:repeat(2,1fr);  
-gap:6px  
-}  
-  
-.trust-item{  
-padding:8px 4px;  
-background:#0a0011;  
-border-radius:8px;  
-border:1px solid #432052  
-}  
-  
-.trust-item b{  
-display:block;  
-font-size:15px  
-}  
-  
-.trust-item span{  
-display:block;  
-color:#aaa;  
-font-size:8px;  
-margin-top:2px  
-}  
-  
-.steps{  
-margin-top:13px;  
-padding:12px 9px;  
-background:#100019;  
-border:1px solid #5e2477;  
-border-radius:14px  
-}  
-  
-.steps h2{  
-text-align:center;  
-color:#d77aff;  
-margin-bottom:7px;  
-font-size:18px  
-}  
-  
-.step{  
-padding:8px 4px;  
-border-bottom:1px solid #291334;  
-color:#ccc;  
-font-size:11px  
-}  
-  
-.step:last-child{border-bottom:0}  
-  
-.footer{  
-margin-top:13px;  
-padding:5px;  
-text-align:center  
-}  
-  
-.footer-line{  
-margin:6px 0;  
-padding:9px 7px;  
-border-radius:10px;  
-background:#0b0013;  
-border:1px solid;  
-font-size:11px;  
-font-weight:bold;  
-text-shadow:0 0 8px;  
-}  
-  
-.f1{color:#50ff99;border-color:#50ff99;box-shadow:0 0 12px #50ff9955}  
-.f2{color:#d77aff;border-color:#d77aff;box-shadow:0 0 12px #d77aff55}  
-.f3{color:#00eaff;border-color:#00eaff;box-shadow:0 0 12px #00eaff55}  
-.f4{color:#ffc43d;border-color:#ffc43d;box-shadow:0 0 12px #ffc43d55}  
-.f5{color:#ff4fd8;border-color:#ff4fd8;box-shadow:0 0 12px #ff4fd855}  
-.f6{color:#ff8c42;border-color:#ff8c42;box-shadow:0 0 12px #ff8c4255}  
-.f7{color:#b36cff;border-color:#b36cff;box-shadow:0 0 12px #b36cff55}  
-.f8{color:#fff;border-color:#fff;box-shadow:0 0 12px #ffffff55}  
-  
-@media(max-width:650px){  
-.container{padding:6px}  
-.grid{grid-template-columns:1fr}  
-.card{padding:8px}  
-.hero h1{font-size:25px}  
-}  
-</style>  </head>  <body>  <div class="container">  <header class="hero">  
-<h1>👑 SUNNY 999 BOT</h1>  
-<p>FREE FIRE ACCOUNT STORE</p>  
-<p>BUY • SELL • EXPLORE FREE FIRE ACCOUNTS</p>  
-</header>  <div class="notice">  
-<strong>⚡ ID SOLD HONE KE BAAD NEW ID AVAILABLE HOGI ⚡</strong>  
-<small>🔥 PRIME 5 TO PRIME 8 IDs — New Stock Available Soon</small>  
-</div>  <div class="cc-board">  
-💎 CC AVAILABLE — LINK BIO ME CHECK KARO  
-</div>  <div class="stats">  <div class="stat">  
-<b class="live">🟢 LIVE</b>  
-<span>STORE STATUS</span>  
-</div>  <div class="stat">  
-<b>110K+</b>  
-<span>INSTAGRAM FAMILY</span>  
-</div>  <div class="stat">  
-<b>1,489</b>  
-<span>TOTAL ID SOLD</span>  
-</div>  <div class="stat">  
-<b>980+</b>  
-<span>NEW STOCK AVAILABLE SOON</span>  
-</div>  </div>  <div class="countdown">  
-<div class="countdown-title">⏳ NEXT STOCK UPDATE</div>  
-<div class="time" id="timer">23:59:59</div>  
-<small>New stock update countdown — 24 hours</small>  
-</div>  <h2 class="section-title">🔥 AVAILABLE ACCOUNTS</h2>  <div class="grid">  <!-- PRIME 5 -->  <div class="card">  <span class="badge">🟢 AVAILABLE</span>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SUNNY 999 BOT — FREE FIRE ACCOUNT STORE</title>
 
-<h3>PRIME 5 ID</h3>  <div class="price">₹999</div>  <div class="what">  
-<b>🎁 WHAT YOU GET</b>  
-<p>  
-✔ Free Fire Account<br>  
-✔ Full Account Access<br>  
-✔ Account Details After Approval  
-</p>  
-</div>  <img src="prime5.jpg.png"  
-class="account-img"  
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+font-family:Arial,sans-serif;
+background:linear-gradient(135deg,#08000f,#19002e,#08000f);
+color:#fff;
+min-height:100vh
+}
+
+.container{max-width:1050px;margin:auto;padding:8px}
+
+.hero{
+text-align:center;
+padding:14px 9px;
+border:1px solid #b63cff;
+border-radius:18px;
+background:linear-gradient(145deg,#19002d,#0d0018);
+box-shadow:0 0 20px #9d20ff55
+}
+
+.hero h1{
+font-size:clamp(24px,5vw,38px);
+color:#d889ff;
+text-shadow:0 0 15px #a600ff;
+margin-bottom:4px
+}
+
+.hero p{color:#ddd;font-size:12px;margin-top:3px}
+
+.notice{
+margin:8px 0;
+padding:10px 8px;
+text-align:center;
+border-radius:12px;
+background:#281000;
+border:1px solid #ff9700
+}
+
+.notice strong{color:#ffb52e;font-size:14px}
+.notice small{display:block;color:#ccc;margin-top:4px;font-size:11px}
+
+.cc-board{
+margin:8px 0;
+padding:11px 8px;
+text-align:center;
+border-radius:12px;
+border:1px solid #00eaff;
+background:#06151b;
+color:#00f6ff;
+font-size:13px;
+font-weight:bold;
+text-shadow:0 0 8px #00eaff;
+box-shadow:0 0 15px #00eaff55
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:7px;
+margin:8px 0
+}
+
+.stat{
+padding:10px 6px;
+text-align:center;
+background:#11001e;
+border:1px solid #7020a8;
+border-radius:12px
+}
+
+.stat b{display:block;font-size:17px}
+.stat span{display:block;font-size:9px;color:#aaa;margin-top:2px}
+.live{color:#43ff91!important}
+
+.countdown{
+text-align:center;
+margin:8px 0 13px;
+padding:10px;
+border-radius:13px;
+background:#07151d;
+border:1px solid #00dcff
+}
+
+.countdown-title{font-size:12px}
+
+.time{
+font-size:25px;
+font-weight:bold;
+color:#00eaff;
+letter-spacing:2px;
+margin:3px 0
+}
+
+.countdown small{color:#aaa;font-size:10px}
+
+.section-title{
+text-align:center;
+margin:14px 0 10px;
+font-size:22px;
+color:#d87cff
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px
+}
+
+.card{
+background:linear-gradient(145deg,#180027,#0c0015);
+border:1px solid #8c27c4;
+border-radius:15px;
+padding:9px
+}
+
+.card.sold{border-color:#555;opacity:.86}
+
+.badge{
+display:inline-block;
+padding:4px 7px;
+border-radius:20px;
+background:#123522;
+color:#50ff99;
+font-size:9px;
+font-weight:bold;
+margin-bottom:5px
+}
+
+.sold .badge{
+background:#351414;
+color:#ff6060
+}
+
+.card h3{font-size:18px;margin-bottom:2px}
+
+.price{
+font-size:23px;
+font-weight:bold;
+color:#ffc43d;
+margin:3px 0 7px
+}
+
+.what{
+background:#100019;
+border:1px solid #63247c;
+border-radius:9px;
+padding:8px;
+margin-bottom:7px
+}
+
+.what b{color:#dc80ff;font-size:11px}
+
+.what p{
+color:#ccc;
+font-size:11px;
+line-height:1.4;
+margin-top:3px
+}
+
+.account-img{
+width:100%;
+height:auto;
+object-fit:contain;
+display:block;
+border-radius:10px;
+border:1px solid #7d2ba6;
+margin-bottom:7px;
+background:transparent
+}
+
+.locked{
+background:#08080d;
+border:1px dashed #666;
+border-radius:9px;
+padding:8px;
+margin-bottom:7px;
+color:#aaa;
+font-size:11px;
+line-height:1.6
+}
+
+.locked strong{color:#fff}
+
+.buy{
+display:block;
+width:100%;
+text-align:center;
+text-decoration:none;
+padding:10px;
+border:0;
+border-radius:9px;
+background:linear-gradient(90deg,#8700ff,#c400ff);
+color:#fff;
+font-weight:bold;
+font-size:13px;
+cursor:pointer
+}
+
+.card-payment{
+display:none;
+margin-top:8px;
+padding:10px;
+background:linear-gradient(145deg,#170021,#0b0014);
+border:1px solid #a32cff;
+border-radius:12px;
+text-align:center
+}
+
+.card-payment.active{display:block}
+
+.card-payment h4{
+color:#dd7cff;
+font-size:16px;
+margin-bottom:4px
+}
+
+.pay-amount{
+color:#ffc43d;
+font-size:21px;
+font-weight:bold;
+margin-bottom:7px
+}
+
+.qr{
+width:180px;
+max-width:90%;
+padding:5px;
+background:#fff;
+border-radius:10px;
+display:block;
+margin:5px auto 8px
+}
+
+.upi{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:5px;
+flex-wrap:wrap;
+margin:7px 0
+}
+
+.upi-code{
+padding:8px 9px;
+background:#08080d;
+border:1px solid #63307d;
+border-radius:8px;
+color:#00ffad;
+font-weight:bold;
+font-size:11px
+}
+
+.copy{
+border:0;
+padding:8px 10px;
+border-radius:8px;
+background:#00bfff;
+color:#001018;
+font-weight:bold;
+cursor:pointer;
+font-size:11px
+}
+
+.name-input{
+width:100%;
+padding:10px;
+border-radius:8px;
+border:1px solid #63307d;
+background:#08000f;
+color:#fff;
+font-size:11px;
+outline:none;
+margin:5px 0
+}
+
+.warning{
+margin:9px 0;
+padding:9px;
+text-align:left;
+background:#2a1000;
+border:1px solid #ff8b00;
+border-radius:10px;
+font-size:10px;
+line-height:1.5
+}
+
+.warning b{color:#ffb42e;font-size:12px}
+
+.telegram{
+display:block;
+text-decoration:none;
+background:#168bd1;
+color:#fff;
+padding:10px;
+border-radius:9px;
+font-weight:bold;
+margin-top:7px;
+font-size:12px
+}
+
+.payment-note{
+font-size:9px;
+color:#aaa;
+line-height:1.4;
+margin-top:6px
+}
+
+.prime6-countdown{
+text-align:center;
+padding:8px;
+margin-bottom:7px;
+border-radius:9px;
+background:#07151d;
+border:1px solid #00dcff
+}
+
+.prime6-countdown small{
+color:#aaa;
+display:block;
+font-size:9px
+}
+
+.prime6-time{
+color:#00eaff;
+font-size:21px;
+font-weight:bold;
+margin-top:2px
+}
+
+.soldbox{
+padding:25px 8px;
+text-align:center;
+border:1px dashed #555;
+border-radius:10px;
+color:#999;
+margin-bottom:7px;
+font-size:11px
+}
+
+.soldbox b{
+display:block;
+color:#ff5555;
+font-size:18px;
+margin-bottom:4px
+}
+
+.trust{
+margin:13px 0;
+padding:12px 9px;
+text-align:center;
+background:#11001d;
+border:1px solid #70258e;
+border-radius:14px
+}
+
+.trust h3{
+color:#e09aff;
+margin-bottom:8px;
+font-size:17px
+}
+
+.trust-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:6px
+}
+
+.trust-item{
+padding:8px 4px;
+background:#0a0011;
+border-radius:8px;
+border:1px solid #432052
+}
+
+.trust-item b{
+display:block;
+font-size:15px
+}
+
+.trust-item span{
+display:block;
+color:#aaa;
+font-size:8px;
+margin-top:2px
+}
+
+.steps{
+margin-top:13px;
+padding:12px 9px;
+background:#100019;
+border:1px solid #5e2477;
+border-radius:14px
+}
+
+.steps h2{
+text-align:center;
+color:#d77aff;
+margin-bottom:7px;
+font-size:18px
+}
+
+.step{
+padding:8px 4px;
+border-bottom:1px solid #291334;
+color:#ccc;
+font-size:11px
+}
+
+.step:last-child{border-bottom:0}
+
+.footer{
+margin-top:13px;
+padding:5px;
+text-align:center
+}
+
+.footer-line{
+margin:6px 0;
+padding:9px 7px;
+border-radius:10px;
+background:#0b0013;
+border:1px solid;
+font-size:11px;
+font-weight:bold;
+text-shadow:0 0 8px
+}
+
+.f1{color:#50ff99;border-color:#50ff99;box-shadow:0 0 12px #50ff9955}
+.f2{color:#d77aff;border-color:#d77aff;box-shadow:0 0 12px #d77aff55}
+.f3{color:#00eaff;border-color:#00eaff;box-shadow:0 0 12px #00eaff55}
+.f4{color:#ffc43d;border-color:#ffc43d;box-shadow:0 0 12px #ffc43d55}
+.f5{color:#ff4fd8;border-color:#ff4fd8;box-shadow:0 0 12px #ff4fd855}
+.f6{color:#ff8c42;border-color:#ff8c42;box-shadow:0 0 12px #ff8c4255}
+.f7{color:#b36cff;border-color:#b36cff;box-shadow:0 0 12px #b36cff55}
+.f8{color:#fff;border-color:#fff;box-shadow:0 0 12px #ffffff55}
+
+@media(max-width:650px){
+.container{padding:6px}
+.grid{grid-template-columns:1fr}
+.card{padding:8px}
+.hero h1{font-size:25px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header class="hero">
+<h1>👑 SUNNY 999 BOT</h1>
+<p>FREE FIRE ACCOUNT STORE</p>
+<p>BUY • SELL • EXPLORE FREE FIRE ACCOUNTS</p>
+</header>
+
+<div class="notice">
+<strong>⚡ ID SOLD HONE KE BAAD NEW ID AVAILABLE HOGI ⚡</strong>
+<small>🔥 PRIME 5 TO PRIME 8 IDs — New Stock Available Soon</small>
+</div>
+
+<div class="cc-board">
+💎 CC AVAILABLE — LINK BIO ME CHECK KARO
+</div>
+
+<div class="stats">
+
+<div class="stat">
+<b class="live">🟢 LIVE</b>
+<span>STORE STATUS</span>
+</div>
+
+<div class="stat">
+<b>110K+</b>
+<span>INSTAGRAM FAMILY</span>
+</div>
+
+<div class="stat">
+<b>1,489</b>
+<span>TOTAL ID SOLD</span>
+</div>
+
+<div class="stat">
+<b>980+</b>
+<span>NEW STOCK AVAILABLE SOON</span>
+</div>
+
+</div>
+
+<div class="countdown">
+<div class="countdown-title">⏳ NEXT STOCK UPDATE</div>
+<div class="time" id="timer">23:59:59</div>
+<small>New stock update countdown — 24 hours</small>
+</div>
+
+<h2 class="section-title">🔥 AVAILABLE ACCOUNTS</h2>
+
+<div class="grid">
+
+<!-- PRIME 5 -->
+
+<div class="card">
+
+<span class="badge">🟢 AVAILABLE</span>
+
+<h3>PRIME 5 ID</h3>
+
+<div class="price">₹999</div>
+
+<div class="what">
+<b>🎁 WHAT YOU GET</b>
+<p>
+✔ Free Fire Account<br>
+✔ Full Account Access<br>
+✔ Account Details After Approval
+</p>
+</div>
+
+<img src="prime5.jpg.png"
+class="account-img"
 alt="Prime 5 Free Fire Account">
 
-<div class="locked">  
-🔒 <strong>ID / PASSWORD LOCKED</strong><br>  
-ID: ••••••••••••<br>  
-PASSWORD: ••••••••••••<br>  
-<span style="color:#777">  
-Payment verification ke baad Telegram bot par details milengi.  
-</span>  
-</div>  <button class="buy" onclick="openPayment('payment5')">  
-🛒 BUY NOW — ₹999  
-</button>  <div class="card-payment" id="payment5">  <h4>💳 PAYMENT</h4>  
-<div class="pay-amount">₹999</div>  <img src="qr.png.jpg" class="qr" alt="Payment QR">  <div class="upi">  
-<div class="upi-code">sunny999bot@nyes</div>  
-<button class="copy" onclick="copyUPI()">📋 COPY</button>  
-</div>  <input  
-class="name-input"  
-id="name5"  
-type="text"  
-maxlength="50"  
+<div class="locked">
+🔒 <strong>ID / PASSWORD LOCKED</strong><br>
+ID: ••••••••••••<br>
+PASSWORD: ••••••••••••<br>
+<span style="color:#777">
+Payment verification ke baad Telegram bot par details milengi.
+</span>
+</div>
+
+<button class="buy" onclick="openPayment('payment5')">
+🛒 BUY NOW — ₹999
+</button>
+
+<div class="card-payment" id="payment5">
+
+<h4>💳 PAYMENT</h4>
+
+<div class="pay-amount">₹999</div>
+
+<img src="qr.png.jpg" class="qr" alt="Payment QR">
+
+<div class="upi">
+<div class="upi-code">sunny999bot@nyes</div>
+<button class="copy" onclick="copyUPI()">📋 COPY</button>
+</div>
+
+<input
+class="name-input"
+id="name5"
+type="text"
+maxlength="50"
 placeholder="👤 ENTER YOUR NAME">
 
-<div class="warning">  
-<b>⚠️ PAYMENT VERIFICATION NOTICE</b>  
-<br><br>  
-🚫 FAKE / EDITED PAYMENT PROOF BILKUL SUBMIT NA KAREIN.  
-<br>  
-🔍 HAR PAYMENT MANUALLY VERIFY KIYA JAYEGA.  
-<br>  
-❌ FAKE PROOF MILNE PAR ORDER REJECT HO SAKTA HAI.  
-<br>  
-⚠️ SIRF REAL PAYMENT KA SCREENSHOT SUBMIT KAREIN.  
-</div>  <a  
-class="telegram"  
-href="https://t.me/FFAccountXBot?start=prime5">
+<div class="warning">
+<b>⚠️ PAYMENT VERIFICATION NOTICE</b>
+<br><br>
+🚫 FAKE / EDITED PAYMENT PROOF BILKUL SUBMIT NA KAREIN.
+<br>
+🔍 HAR PAYMENT MANUALLY VERIFY KIYA JAYEGA.
+<br>
+❌ FAKE PROOF MILNE PAR ORDER REJECT HO SAKTA HAI.
+<br>
+⚠️ SIRF REAL PAYMENT KA SCREENSHOT SUBMIT KAREIN.
+</div>
+
+<a
+class="telegram"
+href="https://t.me/FreeFireActivationBot?start=prime5">
 🤖 VERIFY ON TELEGRAM
 </a>
 
-<div class="payment-note">  
-Payment ke baad Telegram bot mein payment screenshot + apna naam bhejna hoga.  
-</div>  </div>  </div>  <!-- PRIME 6 -->  <div class="card sold">  <span class="badge">🔴 SOLD OUT</span>
+<div class="payment-note">
+Payment ke baad Telegram bot mein payment screenshot + apna naam bhejna hoga.
+</div>
 
-<h3>PRIME 6 ID</h3>  <div class="price">₹1,299</div>  <div class="what">  
-<b>🎁 WHAT YOU GET</b>  
-<p>  
-✔ Free Fire Account<br>  
-✔ Full Account Access<br>  
-✔ New ID After Stock Update  
-</p>  
-</div>  <div class="prime6-countdown">  
-<small>⏳ NEW PRIME 6 STOCK</small>  
-<div class="prime6-time" id="prime6Timer">23:59:59</div>  
-</div>  <div class="soldbox">  
-<b>OUT OF STOCK</b>  
-PRIME 6 ID SOLD  
-<br><br>  
-🔔 New PRIME 6 stock available soon.  
-</div>  <div class="locked">  
-🔒 <strong>ID / PASSWORD LOCKED</strong><br>  
-Current account is unavailable.  
-</div>  </div>  <!-- PRIME 7 -->  <div class="card">  <span class="badge">🟢 AVAILABLE</span>
+</div>
+</div>
 
-<h3>PRIME 7 ID</h3>  <div class="price">₹1,999</div>  <div class="what">  
-<b>🎁 WHAT YOU GET</b>  
-<p>  
-✔ Free Fire Account<br>  
-✔ Full Account Access<br>  
-✔ Account Details After Approval  
-</p>  
-</div>  <img src="prime7.jpg.png"  
-class="account-img"  
+
+<!-- PRIME 6 -->
+
+<div class="card sold">
+
+<span class="badge">🔴 SOLD OUT</span>
+
+<h3>PRIME 6 ID</h3>
+
+<div class="price">₹1,299</div>
+
+<div class="what">
+<b>🎁 WHAT YOU GET</b>
+<p>
+✔ Free Fire Account<br>
+✔ Full Account Access<br>
+✔ New ID After Stock Update
+</p>
+</div>
+
+<div class="prime6-countdown">
+<small>⏳ NEW PRIME 6 STOCK</small>
+<div class="prime6-time" id="prime6Timer">23:59:59</div>
+</div>
+
+<div class="soldbox">
+<b>OUT OF STOCK</b>
+PRIME 6 ID SOLD
+<br><br>
+🔔 New PRIME 6 stock available soon.
+</div>
+
+<div class="locked">
+🔒 <strong>ID / PASSWORD LOCKED</strong><br>
+Current account is unavailable.
+</div>
+
+</div>
+
+
+<!-- PRIME 7 -->
+
+<div class="card">
+
+<span class="badge">🟢 AVAILABLE</span>
+
+<h3>PRIME 7 ID</h3>
+
+<div class="price">₹1,999</div>
+
+<div class="what">
+<b>🎁 WHAT YOU GET</b>
+<p>
+✔ Free Fire Account<br>
+✔ Full Account Access<br>
+✔ Account Details After Approval
+</p>
+</div>
+
+<img src="prime7.jpg.png"
+class="account-img"
 alt="Prime 7 Free Fire Account">
 
-<div class="locked">  
-🔒 <strong>ID / PASSWORD LOCKED</strong><br>  
-ID: ••••••••••••<br>  
-PASSWORD: ••••••••••••<br>  
-<span style="color:#777">  
-Payment verification ke baad Telegram bot par details milengi.  
-</span>  
-</div>  <button class="buy" onclick="openPayment('payment7')">  
-🛒 BUY NOW — ₹1,999  
-</button>  <div class="card-payment" id="payment7">  <h4>💳 PAYMENT</h4>  
-<div class="pay-amount">₹1,999</div>  <img src="qr.png.jpg" class="qr" alt="Payment QR">  <div class="upi">  
-<div class="upi-code">sunny999bot@nyes</div>  
-<button class="copy" onclick="copyUPI()">📋 COPY</button>  
-</div>  <input  
-class="name-input"  
-id="name7"  
-type="text"  
-maxlength="50"  
+<div class="locked">
+🔒 <strong>ID / PASSWORD LOCKED</strong><br>
+ID: ••••••••••••<br>
+PASSWORD: ••••••••••••<br>
+<span style="color:#777">
+Payment verification ke baad Telegram bot par details milengi.
+</span>
+</div>
+
+<button class="buy" onclick="openPayment('payment7')">
+🛒 BUY NOW — ₹1,999
+</button>
+
+<div class="card-payment" id="payment7">
+
+<h4>💳 PAYMENT</h4>
+
+<div class="pay-amount">₹1,999</div>
+
+<img src="qr.png.jpg" class="qr" alt="Payment QR">
+
+<div class="upi">
+<div class="upi-code">sunny999bot@nyes</div>
+<button class="copy" onclick="copyUPI()">📋 COPY</button>
+</div>
+
+<input
+class="name-input"
+id="name7"
+type="text"
+maxlength="50"
 placeholder="👤 ENTER YOUR NAME">
 
-<div class="warning">  
-<b>⚠️ PAYMENT VERIFICATION NOTICE</b>  
-<br><br>  
-🚫 FAKE / EDITED PAYMENT PROOF BILKUL SUBMIT NA KAREIN.  
-<br>  
-🔍 HAR PAYMENT MANUALLY VERIFY KIYA JAYEGA.  
-<br>  
-❌ FAKE PROOF MILNE PAR ORDER REJECT HO SAKTA HAI.  
-<br>  
-⚠️ SIRF REAL PAYMENT KA SCREENSHOT SUBMIT KAREIN.  
-</div>  <a  
-class="telegram"  
-href="https://t.me/FFAccountXBot?start=prime7">
+<div class="warning">
+<b>⚠️ PAYMENT VERIFICATION NOTICE</b>
+<br><br>
+🚫 FAKE / EDITED PAYMENT PROOF BILKUL SUBMIT NA KAREIN.
+<br>
+🔍 HAR PAYMENT MANUALLY VERIFY KIYA JAYEGA.
+<br>
+❌ FAKE PROOF MILNE PAR ORDER REJECT HO SAKTA HAI.
+<br>
+⚠️ SIRF REAL PAYMENT KA SCREENSHOT SUBMIT KAREIN.
+</div>
+
+<a
+class="telegram"
+href="https://t.me/FreeFireActivationBot?start=prime7">
 🤖 VERIFY ON TELEGRAM
 </a>
 
-<div class="payment-note">  
-Payment ke baad Telegram bot mein payment screenshot + apna naam bhejna hoga.  
-</div>  </div>  </div>  <!-- PRIME 8 -->  <div class="card">  <span class="badge">🟢 AVAILABLE</span>
+<div class="payment-note">
+Payment ke baad Telegram bot mein payment screenshot + apna naam bhejna hoga.
+</div>
 
-<h3>PRIME 8 ID</h3>  <div class="price">₹3,999</div>  <div class="what">  
-<b>🎁 WHAT YOU GET</b>  
-<p>  
-✔ Free Fire Account<br>  
-✔ Full Account Access<br>  
-✔ Account Details After Approval  
-</p>  
-</div>  <img src="prime8.jpg.png"  
-class="account-img"  
+</div>
+</div>
+
+
+<!-- PRIME 8 -->
+
+<div class="card">
+
+<span class="badge">🟢 AVAILABLE</span>
+
+<h3>PRIME 8 ID</h3>
+
+<div class="price">₹3,999</div>
+
+<div class="what">
+<b>🎁 WHAT YOU GET</b>
+<p>
+✔ Free Fire Account<br>
+✔ Full Account Access<br>
+✔ Account Details After Approval
+</p>
+</div>
+
+<img src="prime8.jpg.png"
+class="account-img"
 alt="Prime 8 Free Fire Account">
 
-<div class="locked">  
-🔒 <strong>ID / PASSWORD LOCKED</strong><br>  
-ID: ••••••••••••<br>  
-PASSWORD: ••••••••••••<br>  
-<span style="color:#777">  
-Payment verification ke baad Telegram bot par details milengi.  
-</span>  
-</div>  <button class="buy" onclick="openPayment('payment8')">  
-🛒 BUY NOW — ₹3,999  
-</button>  <div class="card-payment" id="payment8">  <h4>💳 PAYMENT</h4>  
-<div class="pay-amount">₹3,999</div>  <img src="qr.png.jpg" class="qr" alt="Payment QR">  <div class="upi">  
-<div class="upi-code">sunny999bot@nyes</div>  
-<button class="copy" onclick="copyUPI()">📋 COPY</button>  
-</div>  <input  
-class="name-input"  
-id="name8"  
-type="text"  
-maxlength="50"  
+<div class="locked">
+🔒 <strong>ID / PASSWORD LOCKED</strong><br>
+ID: ••••••••••••<br>
+PASSWORD: ••••••••••••<br>
+<span style="color:#777">
+Payment verification ke baad Telegram bot par details milengi.
+</span>
+</div>
+
+<button class="buy" onclick="openPayment('payment8')">
+🛒 BUY NOW — ₹3,999
+</button>
+
+<div class="card-payment" id="payment8">
+
+<h4>💳 PAYMENT</h4>
+
+<div class="pay-amount">₹3,999</div>
+
+<img src="qr.png.jpg" class="qr" alt="Payment QR">
+
+<div class="upi">
+<div class="upi-code">sunny999bot@nyes</div>
+<button class="copy" onclick="copyUPI()">📋 COPY</button>
+</div>
+
+<input
+class="name-input"
+id="name8"
+type="text"
+maxlength="50"
 placeholder="👤 ENTER YOUR NAME">
 
-<div class="warning">  
-<b>⚠️ PAYMENT VERIFICATION NOTICE</b>  
-<br><br>  
-🚫 FAKE / EDITED PAYMENT PROOF BILKUL SUBMIT NA KAREIN.  
-<br>  
-🔍 HAR PAYMENT MANUALLY VERIFY KIYA JAYEGA.  
-<br>  
-❌ FAKE PROOF MILNE PAR ORDER REJECT HO SAKTA HAI.  
-<br>  
-⚠️ SIRF REAL PAYMENT KA SCREENSHOT SUBMIT KAREIN.  
-</div>  <a  
-class="telegram"  
-href="https://t.me/FFAccountXBot?start=prime8">
+<div class="warning">
+<b>⚠️ PAYMENT VERIFICATION NOTICE</b>
+<br><br>
+🚫 FAKE / EDITED PAYMENT PROOF BILKUL SUBMIT NA KAREIN.
+<br>
+🔍 HAR PAYMENT MANUALLY VERIFY KIYA JAYEGA.
+<br>
+❌ FAKE PROOF MILNE PAR ORDER REJECT HO SAKTA HAI.
+<br>
+⚠️ SIRF REAL PAYMENT KA SCREENSHOT SUBMIT KAREIN.
+</div>
+
+<a
+class="telegram"
+href="https://t.me/FreeFireActivationBot?start=prime8">
 🤖 VERIFY ON TELEGRAM
 </a>
 
-<div class="payment-note">  
-Payment ke baad Telegram bot mein payment screenshot + apna naam bhejna hoga.  
-</div>  </div>  </div>  </div>  <div class="trust">  <h3>⭐ SUNNY 999 STORE</h3>  <div class="trust-grid">  <div class="trust-item">  
-<b>110K+</b>  
-<span>INSTAGRAM FAMILY</span>  
-</div>  <div class="trust-item">  
-<b>1,489</b>  
-<span>TOTAL ID SOLD</span>  
-</div>  <div class="trust-item">  
-<b>980+</b>  
-<span>NEW STOCK SOON</span>  
-</div>  <div class="trust-item">  
-<b>PRIME 5–8</b>  
-<span>ACCOUNT RANGE</span>  
-</div>  </div>  </div>  <section class="steps">  <h2>📋 HOW IT WORKS</h2>  <div class="step">  
-01️⃣ <b>SELECT ACCOUNT</b><br>  
-Apni available PRIME ID choose karein.  
-</div>  <div class="step">  
-02️⃣ <b>MAKE PAYMENT</b><br>  
-QR / UPI se selected account ka exact amount pay karein.  
-</div>  <div class="step">  
-03️⃣ <b>SEND PROOF</b><br>  
-Telegram bot par payment screenshot + apna naam submit karein.  
-</div>  <div class="step">  
-04️⃣ <b>MANUAL VERIFICATION</b><br>  
-Admin payment details manually verify karega.  
-</div>  <div class="step">  
-05️⃣ <b>ACCOUNT DELIVERY</b><br>  
-Approval ke baad purchased account ki details Telegram bot par milengi.  
-</div>  </section>  <div class="footer">  <div class="footer-line f1">  
-🔥 CHEAPEST MARKET PRICES  
-</div>  <div class="footer-line f2">  
-👑 2+ YEARS TRUSTED  
-</div>  <div class="footer-line f3">  
-👥 50K+ USERS  
-</div>  <div class="footer-line f4">  
-🎮 PRIME 5 — PRIME 8 FREE FIRE IDs  
-</div>  <div class="footer-line f5">  
-⚡ LATEST UPDATES & NEW STOCK  
-</div>  <div class="footer-line f6">  
-© COPYRIGHT BY SUNNY 999  
-</div>  <div class="footer-line f7">  
-🔗 CHECK MY BIO  
-</div>  <div class="footer-line f8">  
-🤖 SUNNY 999 BOT  
-</div>  </div>  </div>  <script>  
-  
-function openPayment(id){  
-  
-document.querySelectorAll(".card-payment").forEach(function(box){  
-box.classList.remove("active");  
-});  
-  
-const box=document.getElementById(id);  
-  
-box.classList.add("active");  
-  
-setTimeout(function(){  
-box.scrollIntoView({  
-behavior:"smooth",  
-block:"nearest"  
-});  
-},100);  
-  
-}  
-  
-function copyUPI(){  
-  
-const upi="sunny999bot@nyes";  
-  
-navigator.clipboard.writeText(upi);  
-  
-alert("UPI ID COPIED!");  
-  
-}  
-  
-  
-/* MAIN 24 HOUR TIMER */  
-  
-const TIMER_KEY="sunny999_stock_countdown";  
-const ONE_DAY=24*60*60*1000;  
-  
-function getEndTime(){  
-  
-let end=localStorage.getItem(TIMER_KEY);  
-  
-if(!end || Number(end)<=Date.now()){  
-  
-end=String(Date.now()+ONE_DAY);  
-  
-localStorage.setItem(TIMER_KEY,end);  
-  
-}  
-  
-return Number(end);  
-  
-}  
-  
-let endTime=getEndTime();  
-  
-function updateTimer(){  
-  
-if(Date.now()>=endTime){  
-  
-endTime=Date.now()+ONE_DAY;  
-  
-localStorage.setItem(TIMER_KEY,endTime);  
-  
-}  
-  
-const left=endTime-Date.now();  
-  
-const hours=Math.floor(left/3600000);  
-const minutes=Math.floor((left%3600000)/60000);  
-const seconds=Math.floor((left%60000)/1000);  
-  
-document.getElementById("timer").textContent=  
-String(hours).padStart(2,"0")+":"+  
-String(minutes).padStart(2,"0")+":"+  
-String(seconds).padStart(2,"0");  
-  
-}  
-  
-updateTimer();  
-setInterval(updateTimer,1000);  
-  
-  
-/* PRIME 6 TIMER */  
-  
-const PRIME6_KEY="sunny999_prime6_countdown";  
-  
-function getPrime6End(){  
-  
-let end=localStorage.getItem(PRIME6_KEY);  
-  
-if(!end || Number(end)<=Date.now()){  
-  
-end=String(Date.now()+ONE_DAY);  
-  
-localStorage.setItem(PRIME6_KEY,end);  
-  
-}  
-  
-return Number(end);  
-  
-}  
-  
-let prime6End=getPrime6End();  
-  
-function updatePrime6Timer(){  
-  
-if(Date.now()>=prime6End){  
-  
-prime6End=Date.now()+ONE_DAY;  
-  
-localStorage.setItem(PRIME6_KEY,prime6End);  
-  
-}  
-  
-const left=prime6End-Date.now();  
-  
-const hours=Math.floor(left/3600000);  
-const minutes=Math.floor((left%3600000)/60000);  
-const seconds=Math.floor((left%60000)/1000);  
-  
-document.getElementById("prime6Timer").textContent=  
-String(hours).padStart(2,"0")+":"+  
-String(minutes).padStart(2,"0")+":"+  
-String(seconds).padStart(2,"0");  
-  
-}  
-  
-updatePrime6Timer();  
-setInterval(updatePrime6Timer,1000);  
-  
-</script>  </body>  
+<div class="payment-note">
+Payment ke baad Telegram bot mein payment screenshot + apna naam bhejna hoga.
+</div>
+
+</div>
+</div>
+
+</div>
+
+
+<div class="trust">
+
+<h3>⭐ SUNNY 999 STORE</h3>
+
+<div class="trust-grid">
+
+<div class="trust-item">
+<b>110K+</b>
+<span>INSTAGRAM FAMILY</span>
+</div>
+
+<div class="trust-item">
+<b>1,489</b>
+<span>TOTAL ID SOLD</span>
+</div>
+
+<div class="trust-item">
+<b>980+</b>
+<span>NEW STOCK SOON</span>
+</div>
+
+<div class="trust-item">
+<b>PRIME 5–8</b>
+<span>ACCOUNT RANGE</span>
+</div>
+
+</div>
+</div>
+
+
+<section class="steps">
+
+<h2>📋 HOW IT WORKS</h2>
+
+<div class="step">
+01️⃣ <b>SELECT ACCOUNT</b><br>
+Apni available PRIME ID choose karein.
+</div>
+
+<div class="step">
+02️⃣ <b>MAKE PAYMENT</b><br>
+QR / UPI se selected account ka exact amount pay karein.
+</div>
+
+<div class="step">
+03️⃣ <b>SEND PROOF</b><br>
+Telegram bot par payment screenshot + apna naam submit karein.
+</div>
+
+<div class="step">
+04️⃣ <b>MANUAL VERIFICATION</b><br>
+Admin payment details manually verify karega.
+</div>
+
+<div class="step">
+05️⃣ <b>ACCOUNT DELIVERY</b><br>
+Approval ke baad purchased account ki details Telegram bot par milengi.
+</div>
+
+</section>
+
+
+<div class="footer">
+
+<div class="footer-line f1">
+🔥 CHEAPEST MARKET PRICES
+</div>
+
+<div class="footer-line f2">
+👑 2+ YEARS TRUSTED
+</div>
+
+<div class="footer-line f3">
+👥 50K+ USERS
+</div>
+
+<div class="footer-line f4">
+🎮 PRIME 5 — PRIME 8 FREE FIRE IDs
+</div>
+
+<div class="footer-line f5">
+⚡ LATEST UPDATES & NEW STOCK
+</div>
+
+<div class="footer-line f6">
+© COPYRIGHT BY SUNNY 999
+</div>
+
+<div class="footer-line f7">
+🔗 CHECK MY BIO
+</div>
+
+<div class="footer-line f8">
+🤖 SUNNY 999 BOT
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+function openPayment(id){
+
+document.querySelectorAll(".card-payment").forEach(function(box){
+box.classList.remove("active");
+});
+
+const box=document.getElementById(id);
+
+box.classList.add("active");
+
+setTimeout(function(){
+
+box.scrollIntoView({
+behavior:"smooth",
+block:"nearest"
+});
+
+},100);
+
+}
+
+
+function copyUPI(){
+
+const upi="sunny999bot@nyes";
+
+navigator.clipboard.writeText(upi);
+
+alert("UPI ID COPIED!");
+
+}
+
+
+/* MAIN 24 HOUR TIMER */
+
+const TIMER_KEY="sunny999_stock_countdown";
+const ONE_DAY=24*60*60*1000;
+
+function getEndTime(){
+
+let end=localStorage.getItem(TIMER_KEY);
+
+if(!end || Number(end)<=Date.now()){
+
+end=String(Date.now()+ONE_DAY);
+
+localStorage.setItem(TIMER_KEY,end);
+
+}
+
+return Number(end);
+
+}
+
+let endTime=getEndTime();
+
+function updateTimer(){
+
+if(Date.now()>=endTime){
+
+endTime=Date.now()+ONE_DAY;
+
+localStorage.setItem(TIMER_KEY,endTime);
+
+}
+
+const left=endTime-Date.now();
+
+const hours=Math.floor(left/3600000);
+const minutes=Math.floor((left%3600000)/60000);
+const seconds=Math.floor((left%60000)/1000);
+
+document.getElementById("timer").textContent=
+String(hours).padStart(2,"0")+":"+
+String(minutes).padStart(2,"0")+":"+
+String(seconds).padStart(2,"0");
+
+}
+
+updateTimer();
+
+setInterval(updateTimer,1000);
+
+
+/* PRIME 6 TIMER */
+
+const PRIME6_KEY="sunny999_prime6_countdown";
+
+function getPrime6End(){
+
+let end=localStorage.getItem(PRIME6_KEY);
+
+if(!end || Number(end)<=Date.now()){
+
+end=String(Date.now()+ONE_DAY);
+
+localStorage.setItem(PRIME6_KEY,end);
+
+}
+
+return Number(end);
+
+}
+
+let prime6End=getPrime6End();
+
+function updatePrime6Timer(){
+
+if(Date.now()>=prime6End){
+
+prime6End=Date.now()+ONE_DAY;
+
+localStorage.setItem(PRIME6_KEY,prime6End);
+
+}
+
+const left=prime6End-Date.now();
+
+const hours=Math.floor(left/3600000);
+const minutes=Math.floor((left%3600000)/60000);
+const seconds=Math.floor((left%60000)/1000);
+
+document.getElementById("prime6Timer").textContent=
+String(hours).padStart(2,"0")+":"+
+String(minutes).padStart(2,"0")+":"+
+String(seconds).padStart(2,"0");
+
+}
+
+updatePrime6Timer();
+
+setInterval(updatePrime6Timer,1000);
+
+</script>
+
+</body>
 </html>
